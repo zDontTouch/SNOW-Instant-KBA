@@ -274,6 +274,31 @@ async function iaRequest(path, method = "GET", body = undefined) {
 
 /*****************************************************************************************************/
 
+function addToCase(kbaId){
+  if(caseData != ""){
+    ise.tab.add("https://itsm.services.sap/attach_knowledge.do?targetTable=sn_customerservice_case&targetId="+caseData.id+"&source=cwf", { show: false } ).then((tab)=>{
+      tabID = tab;
+    });
+    
+    setTimeout(() => {
+      let result = ise.tab.executeJavaScript(tabID, '(() => { document.getElementById("multiField").value = '+kbaId+'; })()');
+      result = ise.tab.executeJavaScript(tabID, '(() => { document.getElementById("attachButton").click(); })()');
+      result = ise.tab.executeJavaScript(tabID, '(() => { document.getElementById("closebutton").click(); })()');
+    }, 3500);
+
+    setTimeout(() => {
+      document.getElementById("kba-success").style.display = "block";
+    }, 4900);
+
+    setTimeout(() => {
+      document.getElementById("kba-success").style.display = "none";
+    }, 8300);
+
+  }else{
+    setAndDisplayError("No case detected to add KBA");
+  }
+ }
+
 var defaultTopPosition = "157px";
 var defaultLeftPosition = "812px";
 try{
@@ -287,37 +312,21 @@ try{
 }
 
 var instantKbaDiv = document.createElement("div");
-instantKbaDiv.setAttribute("style","z-index:99; display:inline; position:absolute; left:"+defaultLeftPosition+"; top:"+defaultTopPosition+";");
+instantKbaDiv.setAttribute("style","z-index:999; display:inline; position:absolute; left:"+defaultLeftPosition+"; top:"+defaultTopPosition+";");
 instantKbaDiv.setAttribute("id","instantKbaDiv");
 var kbaTextBox = document.createElement("input");
 kbaTextBox.setAttribute("id","kbaText");
-kbaTextBox.setAttribute("style","z-index:99; display:inline-block vertical-align:middle; background-color:RGB(var(--now-button--secondary--background-color--hover,var(--now-color--neutral-3,209,214,214)),var(--now-button--secondary--background-color-alpha--hover,var(--now-button--secondary--background-color-alpha,1))); border-color:RGB(var(--now-button--secondary--border-color,var(--now-color--neutral-7,135,147,148))); border-radius:var(--now-button--secondary--border-radius,var(--now-button--border-radius,var(--now-actionable--border-radius,0))); font-family: var(--now-form-field--font-family, var(--now-font-family, \"Source Sans Pro\", Arial, sans-serif));");
+kbaTextBox.setAttribute("style","z-index:999; heigth:30px; display:inline-block vertical-align:middle; background-color:RGB(var(--now-button--secondary--background-color--hover,var(--now-color--neutral-3,209,214,214)),var(--now-button--secondary--background-color-alpha--hover,var(--now-button--secondary--background-color-alpha,1))); border-color:RGB(var(--now-button--secondary--border-color,var(--now-color--neutral-7,135,147,148))); border-radius:var(--now-button--secondary--border-radius,var(--now-button--border-radius,var(--now-actionable--border-radius,0))); font-family: var(--now-form-field--font-family, var(--now-font-family, \"Source Sans Pro\", Arial, sans-serif));");
 kbaTextBox.setAttribute("placeholder","Enter KBA and hit Enter");
 var bridgeButton = document.createElement("button");
 bridgeButton.setAttribute("id","bridgeButton");
-bridgeButton.setAttribute("style","cursor:pointer; z-index:99; display:inline-block; vertical-align:middle; padding:1.5px 5px; background-color:RGB(var(--now-button--secondary--background-color--hover,var(--now-color--neutral-3,209,214,214)),var(--now-button--secondary--background-color-alpha--hover,var(--now-button--secondary--background-color-alpha,1))); border-color:RGB(var(--now-button--secondary--border-color,var(--now-color--neutral-7,135,147,148))); border-radius:var(--now-button--secondary--border-radius,var(--now-button--border-radius,var(--now-actionable--border-radius,0))); border-width:var(--now-button--secondary--border-width,var(--now-button--border-width,var(--now-actionable--border-width,1px))); color:RGB(var(--now-button--secondary--color,var(--now-color--neutral-18,22,27,28))); font-family: var(--now-button--font-family,var(--now-actionable--font-family,var(--now-font-family,\"Source Sans Pro\",Arial,sans-serif))); font-style:var(--now-button--font-style,var(--now-actionable--font-style,normal)); font-weight:var(--now-button--font-weight,var(--now-actionable--font-weight,normal)); font-size:1rem; line-weight:1.25;");
-bridgeButton.innerHTML = "Bridge KBAs";
+bridgeButton.setAttribute("style","cursor:pointer; z-index:999; display:inline-block; vertical-align:baseline; padding:1.5px 5px; background-color:RGB(var(--now-button--secondary--background-color--hover,var(--now-color--neutral-3,209,214,214)),var(--now-button--secondary--background-color-alpha--hover,var(--now-button--secondary--background-color-alpha,1))); border-color:RGB(var(--now-button--secondary--border-color,var(--now-color--neutral-7,135,147,148))); border-radius:var(--now-button--secondary--border-radius,var(--now-button--border-radius,var(--now-actionable--border-radius,0))); border-width:var(--now-button--secondary--border-width,var(--now-button--border-width,var(--now-actionable--border-width,1px))); color:RGB(var(--now-button--secondary--color,var(--now-color--neutral-18,22,27,28))); font-family: var(--now-button--font-family,var(--now-actionable--font-family,var(--now-font-family,\"Source Sans Pro\",Arial,sans-serif))); font-style:var(--now-button--font-style,var(--now-actionable--font-style,normal)); font-weight:var(--now-button--font-weight,var(--now-actionable--font-weight,normal)); font-size:0.85rem; line-weight:1.25;");
+bridgeButton.innerHTML = "☰ Bridge KBAs";
 instantKbaDiv.innerHTML = "<span style=\"cursor:move;\">&nbsp⁞⁞⁞&nbsp</span>";
 instantKbaDiv.appendChild(kbaTextBox);
+instantKbaDiv.innerHTML = instantKbaDiv.innerHTML+" ";
 instantKbaDiv.appendChild(bridgeButton);
 var caseData;
-
-
-/*navigation.addEventListener("navigate", e => {
-  if(e.destination.url.toString().indexOf("/record/incident")>=0){
-    kbaTextBox.setAttribute("style","z-index:99; display:inline-block vertical-align:middle; background-color:RGB(var(--now-button--secondary--background-color--hover,var(--now-color--neutral-3,209,214,214)),var(--now-button--secondary--background-color-alpha--hover,var(--now-button--secondary--background-color-alpha,1))); border-color:RGB(var(--now-button--secondary--border-color,var(--now-color--neutral-7,135,147,148))); border-radius:var(--now-button--secondary--border-radius,var(--now-button--border-radius,var(--now-actionable--border-radius,0))); font-family: var(--now-form-field--font-family, var(--now-font-family, \"Source Sans Pro\", Arial, sans-serif));");
-    document.body.appendChild(instantKbaDiv);
-  }else if(caseData.types[0] == "nocase"){
-    document.getElementById("kbaText").value = "";
-    document.body.removeChild(document.getElementById("instantKbaDiv"));
-  }else if(e.destination.url.toString().indexOf("kb_template_kcs_article")>=0 || e.destination.url.toString().indexOf("sn_customerservice_action_plans")>=0){
-    kbaTextBox.setAttribute("style","z-index:99; display:inline-block vertical-align:middle; background-color:RGB(var(--now-button--secondary--background-color--hover,var(--now-color--neutral-3,209,214,214)),var(--now-button--secondary--background-color-alpha--hover,var(--now-button--secondary--background-color-alpha,1))); border-color:RGB(var(--now-button--secondary--border-color,var(--now-color--neutral-7,135,147,148))); border-radius:var(--now-button--secondary--border-radius,var(--now-button--border-radius,var(--now-actionable--border-radius,0))); font-family: var(--now-form-field--font-family, var(--now-font-family, \"Source Sans Pro\", Arial, sans-serif));");
-    document.getElementById("kbaText").value = "";
-    document.body.removeChild(document.getElementById("instantKbaDiv"));
-  }else{
-    document.body.appendChild(instantKbaDiv);
-  }
-});*/
 
 //Setting content when case is opened
 ise.case.onUpdate2(
@@ -337,6 +346,15 @@ ise.case.onUpdate2(
       }      
   },
   ["headers"]);
+
+  document.addEventListener("keypress", function(event) {
+    if(event.key === "Enter"){
+      var textBoxValue = document.getElementById("kbaText").value.toString();
+      var kbaID = textBoxValue.trim().split(" ")[0];
+      addToCase(kbaID);
+      document.getElementById("kbaText").value = "";
+    }
+  });
 
 
 //set persistent draggable box
