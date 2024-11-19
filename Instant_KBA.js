@@ -287,7 +287,7 @@ try{
 }
 
 var instantKbaDiv = document.createElement("div");
-instantKbaDiv.setAttribute("style","z-index:99; display:inline; position:absolute; left:"+defaultLeftPosition+"; top:"+defaultTopPosition+";")
+instantKbaDiv.setAttribute("style","z-index:99; display:inline; position:absolute; left:"+defaultLeftPosition+"; top:"+defaultTopPosition+";");
 instantKbaDiv.setAttribute("id","instantKbaDiv");
 var kbaTextBox = document.createElement("input");
 kbaTextBox.setAttribute("id","kbaText");
