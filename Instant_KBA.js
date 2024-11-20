@@ -303,7 +303,7 @@ function addToCase(kbaId){
 
 var defaultTopPosition = "13%";
 var defaultLeftPosition = "39%";
-/*try{
+try{
   //get position
   if(localStorage.getItem("instant_Kba_default_position").length > 0){
     defaultLeftPosition = (localStorage.getItem("instant_Kba_default_position").split(",")[0]);
@@ -311,7 +311,7 @@ var defaultLeftPosition = "39%";
   }
 }catch(err){
   
-}*/
+}
 
 var instantKbaDiv = document.createElement("div");
 instantKbaDiv.setAttribute("style","z-index:999; display:inline-block; vertical-alig:top; position:absolute; left:"+defaultLeftPosition+"; top:"+defaultTopPosition+";");
