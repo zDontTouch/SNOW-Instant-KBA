@@ -8,5 +8,5 @@ With this extension, users can simply type the ID of the KBA in the textbox and 
 
 The extension also has a built-in list with all the bridge KBAs, which can be added in a single click:
 <p align="center">
-  <img src="https://github.com/zDontTouch/SNOW-Instant-KBA/blob/d919250ce13b8745a27f1437f10ddde4a67af6e2/screenshots/instantKbaBridgeList.png" />
+  <img src="https://github.com/zDontTouch/SNOW-Instant-KBA/blob/16f0784420fa18f68bdfd3337253dac12af32c8b/screenshots/instantKbaBridgeList.png" />
 </p>
