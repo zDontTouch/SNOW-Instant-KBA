@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name     Express KBA
-// @version  1.0
+// @version  1.1
 // @grant    none
 // @match    *://itsm.services.sap/*
 // @include  *://itsm.services.sap/*
@@ -303,11 +303,15 @@ function addToCase(kbaId){
 
 var defaultTopPosition = "13%";
 var defaultLeftPosition = "39%";
+var fallBackTopPosition = "13%";
+var fallBackLeftPosition = "39%";
 try{
   //get position
   if(localStorage.getItem("instant_Kba_default_position").length > 0){
     defaultLeftPosition = (localStorage.getItem("instant_Kba_default_position").split(",")[0]);
     defaultTopPosition = (localStorage.getItem("instant_Kba_default_position").split(",")[1]);
+    //defaultTopPosition = "13%";
+    //defaultLeftPosition = "39%";
   }
 }catch(err){
   
@@ -328,7 +332,6 @@ try{
   instantKbaDiv.appendChild(kbaTextBox);
   instantKbaDiv.innerHTML = instantKbaDiv.innerHTML+" ";
   instantKbaDiv.appendChild(bridgeButton);
-  document.body.appendChild(instantKbaDiv);
 
 
 var caseData;
@@ -337,9 +340,10 @@ ise.case.onUpdate2(
     async (receivedCaseData) => {
       if(receivedCaseData.types[0] == "nocase"){
         document.getElementById("kbaText").value = "";
-        document.body.removeChild(document.getElementById("instantKbaDiv"));
+        document.body.removeChild(instantKbaDiv);
         caseData.types[0] = "nocase";
         kbaTextBox.setAttribute("style","z-index:99; display:inline-block vertical-align:top; background-color:RGB(var(--now-button--secondary--background-color--hover,var(--now-color--neutral-3,209,214,214)),var(--now-button--secondary--background-color-alpha--hover,var(--now-button--secondary--background-color-alpha,1))); border-color:RGB(var(--now-button--secondary--border-color,var(--now-color--neutral-7,135,147,148))); border-radius:var(--now-button--secondary--border-radius,var(--now-button--border-radius,var(--now-actionable--border-radius,0))); font-family: var(--now-form-field--font-family, var(--now-font-family, \"Source Sans Pro\", Arial, sans-serif));");
+        caseData = "";
       }else if (receivedCaseData.types[0] == "headers"){
         caseData = receivedCaseData;
         document.body.appendChild(instantKbaDiv);
@@ -427,19 +431,23 @@ document.addEventListener("click", (e)=>{
 window.addEventListener("resize",(event)=>{
   //check screen size to avoid widget staying out of bounds
 if(defaultLeftPosition.replace("px","") > window.innerWidth){
-  defaultLeftPosition = window.innerWidth - 320;
-  defaultLeftPosition = defaultLeftPosition + "px";
+  defaultLeftPosition = fallBackLeftPosition;
   document.body.removeChild(instantKbaDiv);
   instantKbaDiv.setAttribute("style","z-index:999; display:inline-block; vertical-alig:top; position:absolute; left:"+defaultLeftPosition+"; top:"+defaultTopPosition+";");
-  document.body.appendChild(instantKbaDiv);
-}else{
-  document.body.removeChild(instantKbaDiv);
-  instantKbaDiv.setAttribute("style","z-index:999; display:inline-block; vertical-alig:top; position:absolute; left:"+defaultLeftPosition+"; top:"+defaultTopPosition+";");
-  document.body.appendChild(instantKbaDiv);
+  localStorage.setItem("instant_Kba_default_position",(defaultLeftPosition+","+defaultTopPosition));
+  if(caseData != ""){
+    document.body.appendChild(instantKbaDiv);
+  }
+  
 }
 
 if(defaultTopPosition.replace("px","") > window.innerHeight){
-  defaultTopPosition = window.innerHeight - 20;
-  defaultTopPosition = defaultTopPosition + "px";
+  defaultTopPosition = fallBackTopPosition
+  document.body.removeChild(instantKbaDiv);
+  instantKbaDiv.setAttribute("style","z-index:999; display:inline-block; vertical-alig:top; position:absolute; left:"+defaultLeftPosition+"; top:"+defaultTopPosition+";");
+  localStorage.setItem("instant_Kba_default_position",(defaultLeftPosition+","+defaultTopPosition));
+  if(caseData != ""){
+    document.body.appendChild(instantKbaDiv);
+  }
 }
 });
