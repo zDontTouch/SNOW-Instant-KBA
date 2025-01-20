@@ -296,42 +296,43 @@ function addToCase(kbaId){
       document.getElementById("kba-success").style.display = "none";
     }, 8300);
 
-  }else{
-    setAndDisplayError("No case detected to add KBA");
   }
  }
 
-var defaultTopPosition = "13%";
-var defaultLeftPosition = "39%";
-var fallBackTopPosition = "13%";
-var fallBackLeftPosition = "39%";
+var defaultTopPosition = "6.5%";
+var defaultRightPosition = "5%";
+var fallBackTopPosition = "6.5%";
+var fallBackRightPosition = "5%";
 try{
   //get position
   if(localStorage.getItem("instant_Kba_default_position").length > 0){
-    defaultLeftPosition = (localStorage.getItem("instant_Kba_default_position").split(",")[0]);
+    defaultRightPosition = (localStorage.getItem("instant_Kba_default_position").split(",")[0]);
     defaultTopPosition = (localStorage.getItem("instant_Kba_default_position").split(",")[1]);
-    //defaultTopPosition = "13%";
-    //defaultLeftPosition = "39%";
   }
 }catch(err){
   
 }
 
   instantKbaDiv = document.createElement("div");
-  instantKbaDiv.setAttribute("style","z-index:999; display:inline-block; vertical-alig:top; position:absolute; left:"+defaultLeftPosition+"; top:"+defaultTopPosition+";");
+  instantKbaDiv.setAttribute("style","z-index:9999; display:inline-block; vertical-alig:top; position:absolute; right:"+defaultRightPosition+"; top:"+defaultTopPosition+";");
   instantKbaDiv.setAttribute("id","instantKbaDiv");
   var kbaTextBox = document.createElement("input");
   kbaTextBox.setAttribute("id","kbaText");
-  kbaTextBox.setAttribute("style","z-index:999; heigth:30px; width:160px; display:inline-block vertical-align:top; background-color:RGB(var(--now-button--secondary--background-color--hover,var(--now-color--neutral-3,209,214,214)),var(--now-button--secondary--background-color-alpha--hover,var(--now-button--secondary--background-color-alpha,1))); border-color:RGB(var(--now-button--secondary--border-color,var(--now-color--neutral-7,135,147,148))); border-radius:var(--now-button--secondary--border-radius,var(--now-button--border-radius,var(--now-actionable--border-radius,0))); font-family: var(--now-form-field--font-family, var(--now-font-family, \"Source Sans Pro\", Arial, sans-serif));");
+  kbaTextBox.setAttribute("style","z-index:9999; heigth:30px; width:160px; display:inline-block vertical-align:top; background-color:RGB(var(--now-button--secondary--background-color--hover,var(--now-color--neutral-3,209,214,214)),var(--now-button--secondary--background-color-alpha--hover,var(--now-button--secondary--background-color-alpha,1))); border-color:RGB(var(--now-button--secondary--border-color,var(--now-color--neutral-7,135,147,148))); border-radius:var(--now-button--secondary--border-radius,var(--now-button--border-radius,var(--now-actionable--border-radius,0))); font-family: var(--now-form-field--font-family, var(--now-font-family, \"Source Sans Pro\", Arial, sans-serif)); color:grey;");
   kbaTextBox.setAttribute("placeholder","Enter KBA to add to case:");
   var bridgeButton = document.createElement("button");
   bridgeButton.setAttribute("id","bridgeButton");
-  bridgeButton.setAttribute("style","cursor:pointer; z-index:999; display:inline-block; vertical-align:top; padding:1.5px 5px; background-color:RGB(var(--now-button--secondary--background-color--hover,var(--now-color--neutral-3,209,214,214)),var(--now-button--secondary--background-color-alpha--hover,var(--now-button--secondary--background-color-alpha,1))); border-color:RGB(var(--now-button--secondary--border-color,var(--now-color--neutral-7,135,147,148))); border-radius:var(--now-button--secondary--border-radius,var(--now-button--border-radius,var(--now-actionable--border-radius,0))); border-width:var(--now-button--secondary--border-width,var(--now-button--border-width,var(--now-actionable--border-width,1px))); color:RGB(var(--now-button--secondary--color,var(--now-color--neutral-18,22,27,28))); font-family: var(--now-button--font-family,var(--now-actionable--font-family,var(--now-font-family,\"Source Sans Pro\",Arial,sans-serif))); font-style:var(--now-button--font-style,var(--now-actionable--font-style,normal)); font-weight:var(--now-button--font-weight,var(--now-actionable--font-weight,normal)); font-size:0.85rem; line-weight:1.25;");
-  bridgeButton.innerHTML = "☰ Bridge KBAs";
+  bridgeButton.setAttribute("style","cursor:pointer; z-index:9999; display:inline-block; vertical-align:top; padding:1.5px 5px; background-color:RGB(var(--now-button--secondary--background-color--hover,var(--now-color--neutral-3,209,214,214)),var(--now-button--secondary--background-color-alpha--hover,var(--now-button--secondary--background-color-alpha,1))); border-color:RGB(var(--now-button--secondary--border-color,var(--now-color--neutral-7,135,147,148))); border-radius:var(--now-button--secondary--border-radius,var(--now-button--border-radius,var(--now-actionable--border-radius,0))); border-width:var(--now-button--secondary--border-width,var(--now-button--border-width,var(--now-actionable--border-width,1px))); color:RGB(var(--now-button--secondary--color,var(--now-color--neutral-18,22,27,28))); font-family: var(--now-button--font-family,var(--now-actionable--font-family,var(--now-font-family,\"Source Sans Pro\",Arial,sans-serif))); font-style:var(--now-button--font-style,var(--now-actionable--font-style,normal)); font-weight:var(--now-button--font-weight,var(--now-actionable--font-weight,normal)); font-size:0.85rem; line-weight:1.25;");
+  bridgeButton.innerHTML = "☰ Supporting KBAs";
+  var helpButton = document.createElement("button");
+  helpButton.setAttribute("id","helpButton");
+  helpButton.setAttribute("style","cursor:pointer; z-index:9999; display:inline-block; margin-left:3px; vertical-align:baseline; padding:1.5px 5px; background-color:RGB(var(--now-button--secondary--background-color--hover,var(--now-color--neutral-3,209,214,214)),var(--now-button--secondary--background-color-alpha--hover,var(--now-button--secondary--background-color-alpha,1))); border-color:RGB(var(--now-button--secondary--border-color,var(--now-color--neutral-7,135,147,148))); border-radius:var(--now-button--secondary--border-radius,var(--now-button--border-radius,var(--now-actionable--border-radius,0))); border-width:var(--now-button--secondary--border-width,var(--now-button--border-width,var(--now-actionable--border-width,1px))); color:RGB(var(--now-button--secondary--color,var(--now-color--neutral-18,22,27,28))); font-family: var(--now-button--font-family,var(--now-actionable--font-family,var(--now-font-family,\"Source Sans Pro\",Arial,sans-serif))); font-style:var(--now-button--font-style,var(--now-actionable--font-style,normal)); font-weight:var(--now-button--font-weight,var(--now-actionable--font-weight,normal)); font-size:0.85rem; line-weight:1.25;");
+  helpButton.innerHTML = "?";
   instantKbaDiv.innerHTML = "<span style=\"cursor:move;\">&nbsp⁞⁞⁞&nbsp</span>";
   instantKbaDiv.appendChild(kbaTextBox);
   instantKbaDiv.innerHTML = instantKbaDiv.innerHTML+" ";
   instantKbaDiv.appendChild(bridgeButton);
+  instantKbaDiv.appendChild(helpButton);
 
 
 var caseData;
@@ -342,7 +343,7 @@ ise.case.onUpdate2(
         document.getElementById("kbaText").value = "";
         document.body.removeChild(instantKbaDiv);
         caseData.types[0] = "nocase";
-        kbaTextBox.setAttribute("style","z-index:99; display:inline-block vertical-align:top; background-color:RGB(var(--now-button--secondary--background-color--hover,var(--now-color--neutral-3,209,214,214)),var(--now-button--secondary--background-color-alpha--hover,var(--now-button--secondary--background-color-alpha,1))); border-color:RGB(var(--now-button--secondary--border-color,var(--now-color--neutral-7,135,147,148))); border-radius:var(--now-button--secondary--border-radius,var(--now-button--border-radius,var(--now-actionable--border-radius,0))); font-family: var(--now-form-field--font-family, var(--now-font-family, \"Source Sans Pro\", Arial, sans-serif));");
+        kbaTextBox.setAttribute("style","z-index:9999; display:inline-block vertical-align:top; background-color:RGB(var(--now-button--secondary--background-color--hover,var(--now-color--neutral-3,209,214,214)),var(--now-button--secondary--background-color-alpha--hover,var(--now-button--secondary--background-color-alpha,1))); border-color:RGB(var(--now-button--secondary--border-color,var(--now-color--neutral-7,135,147,148))); border-radius:var(--now-button--secondary--border-radius,var(--now-button--border-radius,var(--now-actionable--border-radius,0))); font-family: var(--now-form-field--font-family, var(--now-font-family, \"Source Sans Pro\", Arial, sans-serif));");
         caseData = "";
       }else if (receivedCaseData.types[0] == "headers"){
         caseData = receivedCaseData;
@@ -373,16 +374,16 @@ function handleMouseMove(event){
 function onMouseDrag(movementX, movementY){
   var containerStyle = window.getComputedStyle(container);
   container.style.position = "absolute";
-  container.style.left = (movementX-relativeMouseX)+"px";
-  container.style.top = (movementY-relativeMouseY)+"px";
-  defaultLeftPosition = (movementX-relativeMouseX)+"px";
-  defaultTopPosition = (movementY-relativeMouseY)+"px";
-  localStorage.setItem("instant_Kba_default_position",(defaultLeftPosition+","+defaultTopPosition));
+  container.style.right = (100-(((movementX-relativeMouseX) / window.innerWidth)*100))+"%";
+  container.style.top = (((movementY-relativeMouseY) / window.innerHeight)*100)+"%";
+  defaultRightPosition = (100-(((movementX-relativeMouseX) / window.innerWidth)*100))+"%";
+  defaultTopPosition = (((movementY-relativeMouseY) / window.innerHeight)*100)+"%";
+  localStorage.setItem("instant_Kba_default_position",(defaultRightPosition+","+defaultTopPosition));
 }
 
 container.addEventListener("mousedown", (e)=>{
   bounds = container.getBoundingClientRect();
-  relativeMouseX = e.clientX - bounds.left;
+  relativeMouseX = e.clientX - bounds.right;
   relativeMouseY = e.clientY - bounds.top;
   document.addEventListener("mousemove", handleMouseMove);
 });
@@ -392,19 +393,27 @@ document.addEventListener("mouseup",()=>{
 });
 
 var isPopupOpen = false;
+var isHelpPopupOpen = false;
 document.addEventListener("click", (e)=>{
 
+  //calculate horizontal shift of the popups (compare the full width of the screen with the position of the start of the widget - full width * percentage position/100 )
+  var availableHorizontalSpace = window.innerWidth - (window.innerWidth * (100-(defaultRightPosition.replace("%","")/100)));
+  var leftPosition = 0;
+  if(availableHorizontalSpace < 660){
+    leftPosition = -347;
+  }
+
   if(e.target.id == "bridgeButton"){
-    //calculate shift of the list
-    var availableHorizontalSpace = window.innerWidth - defaultLeftPosition.replace("px","");
-    var leftPosition = 0;
-    if(availableHorizontalSpace < 640){
-      leftPosition = -350;
-    }
     var bridgePopup = document.createElement("div");
     bridgePopup.setAttribute("id","bridgePopup");
-    bridgePopup.innerHTML = "<span style=\"font-family: var(--now-form-field--font-family, var(--now-font-family, \"Source Sans Pro\", Arial, sans-serif));\"><h3 style=\"margin:10px 0px 0px 10px;\">Click to add a bridge KBA to this case:</h3><ul style=\"text-align:left; list-style-position:inside; padding-left:5px;\"><li  style=\"margin-bottom:3px;\" style=\"margin-bottom:3px;\"><span style=\"cursor:pointer;\" id=\"instantkba:2531750\">Project Specific Consulting Questions - Consulting provided to Customer</span></li><li  style=\"margin-bottom:3px;\"><span style=\"cursor:pointer;\" id=\"instantkba:2576522\">Project Specific Consulting Questions</span></li><li  style=\"margin-bottom:3px;\"><span style=\"cursor:pointer;\" id=\"instantkba:2537493\">Knowledge Gap / How To Question</span></li><li  style=\"margin-bottom:3px;\"><span style=\"cursor:pointer;\" id=\"instantkba:2531712\">Incident Solved by SAP Help Center / SAP Community Documentation</span></li><li  style=\"margin-bottom:3px;\"><span style=\"cursor:pointer;\"  id=\"instantkba:2973358\">SAP Community: Preferred Support Channel for How-To Questions</span></li><li  style=\"margin-bottom:3px;\"><span style=\"cursor:pointer;\"  id=\"instantkba:2537448\">Handling Error</span></li><li  style=\"margin-bottom:3px;\"><span style=\"cursor:pointer;\"  id=\"instantkba:2543549\">Error caused by Customer Modification (Wrong Modification / Customization)</span></li><li  style=\"margin-bottom:3px;\"><span style=\"cursor:pointer;\"  id=\"instantkba:2531826\">Error caused by Customer Modification/Development (Wrong Modification caused by Add-On)</span></li><li  style=\"margin-bottom:3px;\"><span style=\"cursor:pointer;\"  id=\"instantkba:2543587\">Issue caused by Third Party Solution</span></li><li  style=\"margin-bottom:3px;\"><span style=\"cursor:pointer;\"  id=\"instantkba:2531827\">Functionality Currently not Available</span></li><li  style=\"margin-bottom:3px;\"><span style=\"cursor:pointer;\"  id=\"instantkba:2531921\">Implementation or fix not Feasible in the Current Release - Functionality Planned for a Future Release </span></li><li  style=\"margin-bottom:3px;\"><span style=\"cursor:pointer;\"  id=\"instantkba:2531650\">New Customer Request for Additional Feature or Function in SAP standard software</span></li><li  style=\"margin-bottom:3px;\"><span style=\"cursor:pointer;\"  id=\"instantkba:2531747\">Feature/Functionality Considered for Release Planning </span></li><li  style=\"margin-bottom:3px;\"><span style=\"cursor:pointer;\"  id=\"instantkba:2528300\">Product Too Complex to be Used Easily</span></li><li  style=\"margin-bottom:3px;\"><span style=\"cursor:pointer;\"  id=\"instantkba:2541693\">Solution Provided by Hotfix Deployment</span></li><li  style=\"margin-bottom:3px;\"><span style=\"cursor:pointer;\"  id=\"instantkba:2541754\">Solution Provided by Backend Correction</span></li><li  style=\"margin-bottom:3px;\"><span style=\"cursor:pointer;\"  id=\"instantkba:2532334\">Supporting Knowledge Based Article : Known Limitation </span></li><li  style=\"margin-bottom:3px;\"><span style=\"cursor:pointer;\"  id=\"instantkba:2532326\">Supporting Knowledge Based Article : New Limitation </span></li><li  style=\"margin-bottom:3px;\"><span style=\"cursor:pointer;\"  id=\"instantkba:2531828\">Error Cannot be Reproduced: No Solution </span></li><li  style=\"margin-bottom:3px;\"><span style=\"cursor:pointer;\"  id=\"instantkba:2527097\">Issue Solved by Hosting </span></li><li  style=\"margin-bottom:3px;\"><span style=\"cursor:pointer;\"  id=\"instantkba:3488027\">Health Check Process</span></li><li  style=\"margin-bottom:3px;\"><span style=\"cursor:pointer;\"  id=\"instantkba:2531864\">Duplicate Case Handling</span></li><li  style=\"margin-bottom:3px;\"><span style=\"cursor:pointer;\"  id=\"instantkba:2572475\">Incident Created as a Test incident</span></li></ul></span>"
-    bridgePopup.setAttribute("style","display:block; position:absolute; left:"+leftPosition+"px; width:640px; top:25px; background-color:RGB(var(--now-button--secondary--background-color,var(--now-color--neutral-3,209,214,214)),1);border-style:solid; border-width:1px; border-radius:8px; border-color:RGB(var(--now-button--secondary--border-color,var(--now-color--neutral-7,135,147,148)));");
+    bridgePopup.innerHTML = "<span style=\"font-family: var(--now-form-field--font-family, var(--now-font-family, \"Source Sans Pro\", Arial, sans-serif));\"><h3 style=\"margin:10px 0px 0px 10px;\">Click to add a Supporting KBA to this case:</h3><ul style=\"text-align:left; list-style-position:inside; list-style-type:none; padding-left:5px;\"><li  style=\"margin-bottom:3px;\" style=\"margin-bottom:3px;\"><span style=\"cursor:pointer;\" id=\"instantkba:2531750\">• 2531750 - Project Specific Consulting Questions - Consulting provided to Customer</span></li><li  style=\"margin-bottom:3px;\"><span style=\"cursor:pointer;\" id=\"instantkba:2576522\">• 2576522 - Project Specific Consulting Questions</span></li><li  style=\"margin-bottom:3px;\"><span style=\"cursor:pointer;\" id=\"instantkba:2537493\">• 2537493 - Knowledge Gap / How To Question</span></li><li  style=\"margin-bottom:3px;\"><span style=\"cursor:pointer;\" id=\"instantkba:2531712\">• 2531712 - Incident Solved by SAP Help Center / SAP Community Documentation</span></li><li  style=\"margin-bottom:3px;\"><span style=\"cursor:pointer;\"  id=\"instantkba:2973358\">• 2973358 - SAP Community: Preferred Support Channel for How-To Questions</span></li><li  style=\"margin-bottom:3px;\"><span style=\"cursor:pointer;\"  id=\"instantkba:2537448\">• 2537448 - Handling Error</span></li><li  style=\"margin-bottom:3px;\"><span style=\"cursor:pointer;\"  id=\"instantkba:2543549\">• 2543549 - Error caused by Customer Modification (Wrong Modification / Customization)</span></li><li  style=\"margin-bottom:3px;\"><span style=\"cursor:pointer;\"  id=\"instantkba:2531826\">• 2531826 - Error caused by Customer Modification/Development (Wrong Modification caused by Add-On)</span></li><li  style=\"margin-bottom:3px;\"><span style=\"cursor:pointer;\"  id=\"instantkba:2543587\">• 2543587 - Issue caused by Third Party Solution</span></li><li  style=\"margin-bottom:3px;\"><span style=\"cursor:pointer;\"  id=\"instantkba:2531827\">• 2531827 - Functionality Currently not Available</span></li><li  style=\"margin-bottom:3px;\"><span style=\"cursor:pointer;\"  id=\"instantkba:2531921\">• 2531921 - Implementation or fix not Feasible in the Current Release - Functionality Planned for a Future Release </span></li><li  style=\"margin-bottom:3px;\"><span style=\"cursor:pointer;\"  id=\"instantkba:2531650\">• 2531650 - New Customer Request for Additional Feature or Function in SAP standard software</span></li><li  style=\"margin-bottom:3px;\"><span style=\"cursor:pointer;\"  id=\"instantkba:2531747\">• 2531747 - Feature/Functionality Considered for Release Planning </span></li><li  style=\"margin-bottom:3px;\"><span style=\"cursor:pointer;\"  id=\"instantkba:2528300\">• 2528300 - Product Too Complex to be Used Easily</span></li><li  style=\"margin-bottom:3px;\"><span style=\"cursor:pointer;\"  id=\"instantkba:2541693\">• 2541693 - Solution Provided by Hotfix Deployment</span></li><li  style=\"margin-bottom:3px;\"><span style=\"cursor:pointer;\"  id=\"instantkba:2541754\">• 2541754 - Solution Provided by Backend Correction</span></li><li  style=\"margin-bottom:3px;\"><span style=\"cursor:pointer;\"  id=\"instantkba:2532334\">• 2532334 - Supporting Knowledge Based Article : Known Limitation </span></li><li  style=\"margin-bottom:3px;\"><span style=\"cursor:pointer;\"  id=\"instantkba:2532326\">• 2532326 - Supporting Knowledge Based Article : New Limitation </span></li><li  style=\"margin-bottom:3px;\"><span style=\"cursor:pointer;\"  id=\"instantkba:2531828\">• 2531828 - Error Cannot be Reproduced: No Solution </span></li><li  style=\"margin-bottom:3px;\"><span style=\"cursor:pointer;\"  id=\"instantkba:2527097\">• 2527097 - Issue Solved by Hosting </span></li><li  style=\"margin-bottom:3px;\"><span style=\"cursor:pointer;\"  id=\"instantkba:3488027\">• 3488027 - Health Check Process</span></li><li  style=\"margin-bottom:3px;\"><span style=\"cursor:pointer;\"  id=\"instantkba:2531864\">• 2531864 - Duplicate Case Handling</span></li><li  style=\"margin-bottom:3px;\"><span style=\"cursor:pointer;\"  id=\"instantkba:2572475\">• 2572475 - Incident Created as a Test incident</span></li></ul></span>"
+    bridgePopup.setAttribute("style","display:block; position:absolute; left:"+leftPosition+"px; width:660px; top:25px; background-color:RGB(var(--now-button--secondary--background-color,var(--now-color--neutral-3,209,214,214)),1);border-style:solid; border-width:1px; border-radius:8px; border-color:RGB(var(--now-button--secondary--border-color,var(--now-color--neutral-7,135,147,148)));");
+
+    //close Help popup
+    try{
+      instantKbaDiv.removeChild(document.getElementById("helpPopup"));
+      isHelpPopupOpen = false;
+    }catch(err){}
 
     if(isPopupOpen){
       instantKbaDiv.removeChild(document.getElementById("bridgePopup"));
@@ -417,24 +426,48 @@ document.addEventListener("click", (e)=>{
     addToCase(e.target.id.replace("instantkba:",""));
     instantKbaDiv.removeChild(document.getElementById("bridgePopup"));
     isPopupOpen = false;
+  }else if(e.target.id == "helpButton"){
+    var helpPopup = document.createElement("div");
+    helpPopup.setAttribute("id","helpPopup");
+    helpPopup.innerHTML = "The Express KBA script is used to quickly attach KBAs to SNOW cases. <br>Use the textbox on the left to type the KBA ID and hit the enter key on your keyboard to execute the script.<br>You can also click on the Supporting KBAs button and click on one of the KBAs from the standard list to add it to the case.<br><br>This widget can be dragged and positioned anywhere on the screen";
+    helpPopup.setAttribute("style","padding: 4px; display:block; position:absolute; left:"+(leftPosition+15)+"px; width:660px; top:25px; background-color:RGB(var(--now-button--secondary--background-color,var(--now-color--neutral-3,209,214,214)),1);border-style:solid; border-width:1px; border-radius:8px; border-color:RGB(var(--now-button--secondary--border-color,var(--now-color--neutral-7,135,147,148)));");
+
+    //Close bridge popup
+    try{
+      instantKbaDiv.removeChild(document.getElementById("bridgePopup"));
+      isPopupOpen = false;      
+    }catch(err){}
+
+    if(isHelpPopupOpen){
+      instantKbaDiv.removeChild(document.getElementById("helpPopup"));
+      isHelpPopupOpen = false;
+    }else{
+      instantKbaDiv.appendChild(helpPopup);
+      isHelpPopupOpen = true;
+    }
   }else{
     try{
       instantKbaDiv.removeChild(document.getElementById("bridgePopup"));
-      isPopupOpen = false;
-    }catch(err){
+      isPopupOpen = false;      
+    }catch(err){}
 
-    }
+    try{
+      instantKbaDiv.removeChild(document.getElementById("helpPopup"));
+      isHelpPopupOpen = false;
+    }catch(err){}
   }
   
 });
 
+
+
 window.addEventListener("resize",(event)=>{
   //check screen size to avoid widget staying out of bounds
-if(defaultLeftPosition.replace("px","") > window.innerWidth){
-  defaultLeftPosition = fallBackLeftPosition;
+if(defaultRightPosition.replace("px","") > window.innerWidth){
+  defaultRightPosition = fallBackRightPosition;
   document.body.removeChild(instantKbaDiv);
-  instantKbaDiv.setAttribute("style","z-index:999; display:inline-block; vertical-alig:top; position:absolute; left:"+defaultLeftPosition+"; top:"+defaultTopPosition+";");
-  localStorage.setItem("instant_Kba_default_position",(defaultLeftPosition+","+defaultTopPosition));
+  instantKbaDiv.setAttribute("style","z-index:9999; display:inline-block; vertical-alig:top; position:absolute; right:"+defaultRightPosition+"; top:"+defaultTopPosition+";");
+  localStorage.setItem("instant_Kba_default_position",(defaultRightPosition+","+defaultTopPosition));
   if(caseData != ""){
     document.body.appendChild(instantKbaDiv);
   }
@@ -444,8 +477,8 @@ if(defaultLeftPosition.replace("px","") > window.innerWidth){
 if(defaultTopPosition.replace("px","") > window.innerHeight){
   defaultTopPosition = fallBackTopPosition
   document.body.removeChild(instantKbaDiv);
-  instantKbaDiv.setAttribute("style","z-index:999; display:inline-block; vertical-alig:top; position:absolute; left:"+defaultLeftPosition+"; top:"+defaultTopPosition+";");
-  localStorage.setItem("instant_Kba_default_position",(defaultLeftPosition+","+defaultTopPosition));
+  instantKbaDiv.setAttribute("style","z-index:9999; display:inline-block; vertical-alig:top; position:absolute; right:"+defaultRightPosition+"; top:"+defaultTopPosition+";");
+  localStorage.setItem("instant_Kba_default_position",(defaultRightPosition+","+defaultTopPosition));
   if(caseData != ""){
     document.body.appendChild(instantKbaDiv);
   }
