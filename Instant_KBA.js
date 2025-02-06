@@ -347,7 +347,11 @@ top.ise.case.onUpdate2(
         caseData = "";
       }else if (receivedCaseData.types[0] == "headers"){
         caseData = receivedCaseData;
-        document.body.appendChild(instantKbaDiv);
+        if(window.innerHeight>500){
+          document.body.appendChild(instantKbaDiv);
+        }
+        
+        
       }      
   },
   ["headers"]);
@@ -614,7 +618,6 @@ document.addEventListener("click", (e)=>{
 });
 
 
-
 window.addEventListener("resize",(event)=>{
   //check screen size to avoid widget staying out of bounds
 if(defaultRightPosition.replace("px","") > window.innerWidth){
@@ -623,7 +626,9 @@ if(defaultRightPosition.replace("px","") > window.innerWidth){
   instantKbaDiv.setAttribute("style","z-index:9999; display:inline-block; vertical-align:baseline; position:absolute; right:"+defaultRightPosition+"; top:"+defaultTopPosition+";");
   localStorage.setItem("instant_Kba_default_position",(defaultRightPosition+","+defaultTopPosition));
   if(caseData != ""){
-    document.body.appendChild(instantKbaDiv);
+    if(window.innerHeight>500){
+      document.body.appendChild(instantKbaDiv);
+    }
   }
   
 }
@@ -634,7 +639,9 @@ if(defaultTopPosition.replace("px","") > window.innerHeight){
   instantKbaDiv.setAttribute("style","z-index:9999; display:inline-block; vertical-align:baseline; position:absolute; right:"+defaultRightPosition+"; top:"+defaultTopPosition+";");
   localStorage.setItem("instant_Kba_default_position",(defaultRightPosition+","+defaultTopPosition));
   if(caseData != ""){
-    document.body.appendChild(instantKbaDiv);
+    if(window.innerHeight>500){
+      document.body.appendChild(instantKbaDiv);
+    }
   }
 }
 });
