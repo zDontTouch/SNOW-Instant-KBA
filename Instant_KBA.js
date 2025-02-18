@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name     Express KBA
-// @version  2.0
+// @version  2.1.1
 // @grant    none
 // @match    *://itsm.services.sap/*
 // @include  *://itsm.services.sap/*
@@ -357,7 +357,7 @@ top.ise.case.onUpdate2(
   ["headers"]);
 
   document.addEventListener("keypress", function(event) {
-    if(event.key === "Enter"){
+    if(event.key === "Enter" && document.activeElement.id == "kbaText"){
       var textBoxValue = document.getElementById("kbaText").value.toString();
       var kbaID = textBoxValue.trim().split(" ")[0].split("-")[0];
       addToCase(kbaID);
