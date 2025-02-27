@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name     Express KBA
-// @version  2.1.1
+// @version  2.1.2
 // @grant    none
 // @match    *://itsm.services.sap/*
 // @include  *://itsm.services.sap/*
@@ -314,19 +314,19 @@ try{
 }
 
   instantKbaDiv = document.createElement("div");
-  instantKbaDiv.setAttribute("style","z-index:9999; display:inline-block; vertical-align:baseline; position:absolute; right:"+defaultRightPosition+"; top:"+defaultTopPosition+";");
+  instantKbaDiv.setAttribute("style","z-index:3998; display:inline-block; vertical-align:baseline; position:absolute; right:"+defaultRightPosition+"; top:"+defaultTopPosition+";");
   instantKbaDiv.setAttribute("id","instantKbaDiv");
   var kbaTextBox = document.createElement("input");
   kbaTextBox.setAttribute("id","kbaText");
-  kbaTextBox.setAttribute("style","z-index:9999; heigth:30.5px; width:160px; display:inline-block vertical-align:baseline; background-color:RGB(var(--now-button--secondary--background-color--hover,var(--now-color--neutral-3,209,214,214)),var(--now-button--secondary--background-color-alpha--hover,var(--now-button--secondary--background-color-alpha,1))); border-color:RGB(var(--now-button--secondary--border-color,var(--now-color--neutral-7,135,147,148))); border-radius:var(--now-button--secondary--border-radius,var(--now-button--border-radius,var(--now-actionable--border-radius,0))); font-family: var(--now-form-field--font-family, var(--now-font-family, \"Source Sans Pro\", Arial, sans-serif)); color:grey;");
+  kbaTextBox.setAttribute("style","z-index:3998; heigth:30.5px; width:160px; display:inline-block vertical-align:baseline; background-color:RGB(var(--now-button--secondary--background-color--hover,var(--now-color--neutral-3,209,214,214)),var(--now-button--secondary--background-color-alpha--hover,var(--now-button--secondary--background-color-alpha,1))); border-color:RGB(var(--now-button--secondary--border-color,var(--now-color--neutral-7,135,147,148))); border-radius:var(--now-button--secondary--border-radius,var(--now-button--border-radius,var(--now-actionable--border-radius,0))); font-family: var(--now-form-field--font-family, var(--now-font-family, \"Source Sans Pro\", Arial, sans-serif)); color:grey;");
   kbaTextBox.setAttribute("placeholder","Enter KBA to add to case:");
   var bridgeButton = document.createElement("button");
   bridgeButton.setAttribute("id","bridgeButton");
-  bridgeButton.setAttribute("style","cursor:pointer; z-index:9999; display:inline-block; vertical-align:baseline; padding:1px 5px 2px 5px; background-color:RGB(var(--now-button--secondary--background-color--hover,var(--now-color--neutral-3,209,214,214)),var(--now-button--secondary--background-color-alpha--hover,var(--now-button--secondary--background-color-alpha,1))); border-color:RGB(var(--now-button--secondary--border-color,var(--now-color--neutral-7,135,147,148))); border-radius:var(--now-button--secondary--border-radius,var(--now-button--border-radius,var(--now-actionable--border-radius,0))); border-width:var(--now-button--secondary--border-width,var(--now-button--border-width,var(--now-actionable--border-width,1px))); color:RGB(var(--now-button--secondary--color,var(--now-color--neutral-18,22,27,28))); font-family: var(--now-button--font-family,var(--now-actionable--font-family,var(--now-font-family,\"Source Sans Pro\",Arial,sans-serif))); font-style:var(--now-button--font-style,var(--now-actionable--font-style,normal)); font-weight:var(--now-button--font-weight,var(--now-actionable--font-weight,normal)); font-size:0.85rem; line-weight:1.25;");
+  bridgeButton.setAttribute("style","cursor:pointer; z-index:3998; display:inline-block; vertical-align:baseline; padding:1px 5px 2px 5px; background-color:RGB(var(--now-button--secondary--background-color--hover,var(--now-color--neutral-3,209,214,214)),var(--now-button--secondary--background-color-alpha--hover,var(--now-button--secondary--background-color-alpha,1))); border-color:RGB(var(--now-button--secondary--border-color,var(--now-color--neutral-7,135,147,148))); border-radius:var(--now-button--secondary--border-radius,var(--now-button--border-radius,var(--now-actionable--border-radius,0))); border-width:var(--now-button--secondary--border-width,var(--now-button--border-width,var(--now-actionable--border-width,1px))); color:RGB(var(--now-button--secondary--color,var(--now-color--neutral-18,22,27,28))); font-family: var(--now-button--font-family,var(--now-actionable--font-family,var(--now-font-family,\"Source Sans Pro\",Arial,sans-serif))); font-style:var(--now-button--font-style,var(--now-actionable--font-style,normal)); font-weight:var(--now-button--font-weight,var(--now-actionable--font-weight,normal)); font-size:0.85rem; line-weight:1.25;");
   bridgeButton.innerHTML = "★ Bookmarks";
   var helpButton = document.createElement("button");
   helpButton.setAttribute("id","helpButton");
-  helpButton.setAttribute("style","cursor:pointer; z-index:9999; display:inline-block; margin-left:3px; vertical-align:baseline; padding:1px 5px 0.5px 5px; background-color:RGB(var(--now-button--secondary--background-color--hover,var(--now-color--neutral-3,209,214,214)),var(--now-button--secondary--background-color-alpha--hover,var(--now-button--secondary--background-color-alpha,1))); border-color:RGB(var(--now-button--secondary--border-color,var(--now-color--neutral-7,135,147,148))); border-radius:var(--now-button--secondary--border-radius,var(--now-button--border-radius,var(--now-actionable--border-radius,0))); border-width:var(--now-button--secondary--border-width,var(--now-button--border-width,var(--now-actionable--border-width,1px))); color:RGB(var(--now-button--secondary--color,var(--now-color--neutral-18,22,27,28))); font-family: var(--now-button--font-family,var(--now-actionable--font-family,var(--now-font-family,\"Source Sans Pro\",Arial,sans-serif))); font-style:var(--now-button--font-style,var(--now-actionable--font-style,normal)); font-weight:var(--now-button--font-weight,var(--now-actionable--font-weight,normal)); font-size:0.85rem; line-weight:1.25;");
+  helpButton.setAttribute("style","cursor:pointer; z-index:3998; display:inline-block; margin-left:3px; vertical-align:baseline; padding:1px 5px 0.5px 5px; background-color:RGB(var(--now-button--secondary--background-color--hover,var(--now-color--neutral-3,209,214,214)),var(--now-button--secondary--background-color-alpha--hover,var(--now-button--secondary--background-color-alpha,1))); border-color:RGB(var(--now-button--secondary--border-color,var(--now-color--neutral-7,135,147,148))); border-radius:var(--now-button--secondary--border-radius,var(--now-button--border-radius,var(--now-actionable--border-radius,0))); border-width:var(--now-button--secondary--border-width,var(--now-button--border-width,var(--now-actionable--border-width,1px))); color:RGB(var(--now-button--secondary--color,var(--now-color--neutral-18,22,27,28))); font-family: var(--now-button--font-family,var(--now-actionable--font-family,var(--now-font-family,\"Source Sans Pro\",Arial,sans-serif))); font-style:var(--now-button--font-style,var(--now-actionable--font-style,normal)); font-weight:var(--now-button--font-weight,var(--now-actionable--font-weight,normal)); font-size:0.85rem; line-weight:1.25;");
   helpButton.innerHTML = "?";
   instantKbaDiv.innerHTML = "<span style=\"cursor:move;\">&nbsp⁞⁞⁞&nbsp</span>";
   instantKbaDiv.appendChild(kbaTextBox);
@@ -343,7 +343,7 @@ top.ise.case.onUpdate2(
         document.getElementById("kbaText").value = "";
         document.body.removeChild(instantKbaDiv);
         caseData.types[0] = "nocase";
-        kbaTextBox.setAttribute("style","z-index:9999; display:inline-block vertical-align:baseline; background-color:RGB(var(--now-button--secondary--background-color--hover,var(--now-color--neutral-3,209,214,214)),var(--now-button--secondary--background-color-alpha--hover,var(--now-button--secondary--background-color-alpha,1))); border-color:RGB(var(--now-button--secondary--border-color,var(--now-color--neutral-7,135,147,148))); border-radius:var(--now-button--secondary--border-radius,var(--now-button--border-radius,var(--now-actionable--border-radius,0))); font-family: var(--now-form-field--font-family, var(--now-font-family, \"Source Sans Pro\", Arial, sans-serif));");
+        kbaTextBox.setAttribute("style","z-index:3998; display:inline-block vertical-align:baseline; background-color:RGB(var(--now-button--secondary--background-color--hover,var(--now-color--neutral-3,209,214,214)),var(--now-button--secondary--background-color-alpha--hover,var(--now-button--secondary--background-color-alpha,1))); border-color:RGB(var(--now-button--secondary--border-color,var(--now-color--neutral-7,135,147,148))); border-radius:var(--now-button--secondary--border-radius,var(--now-button--border-radius,var(--now-actionable--border-radius,0))); font-family: var(--now-form-field--font-family, var(--now-font-family, \"Source Sans Pro\", Arial, sans-serif));");
         caseData = "";
       }else if (receivedCaseData.types[0] == "headers"){
         caseData = receivedCaseData;
@@ -614,6 +614,7 @@ document.addEventListener("click", (e)=>{
     }catch(err){}
     
   }
+
   
 });
 
@@ -623,7 +624,7 @@ window.addEventListener("resize",(event)=>{
 if(defaultRightPosition.replace("px","") > window.innerWidth){
   defaultRightPosition = fallBackRightPosition;
   document.body.removeChild(instantKbaDiv);
-  instantKbaDiv.setAttribute("style","z-index:9999; display:inline-block; vertical-align:baseline; position:absolute; right:"+defaultRightPosition+"; top:"+defaultTopPosition+";");
+  instantKbaDiv.setAttribute("style","z-index:3998; display:inline-block; vertical-align:baseline; position:absolute; right:"+defaultRightPosition+"; top:"+defaultTopPosition+";");
   localStorage.setItem("instant_Kba_default_position",(defaultRightPosition+","+defaultTopPosition));
   if(caseData != ""){
     if(window.innerHeight>500){
@@ -636,7 +637,7 @@ if(defaultRightPosition.replace("px","") > window.innerWidth){
 if(defaultTopPosition.replace("px","") > window.innerHeight){
   defaultTopPosition = fallBackTopPosition
   document.body.removeChild(instantKbaDiv);
-  instantKbaDiv.setAttribute("style","z-index:9999; display:inline-block; vertical-align:baseline; position:absolute; right:"+defaultRightPosition+"; top:"+defaultTopPosition+";");
+  instantKbaDiv.setAttribute("style","z-index:3998; display:inline-block; vertical-align:baseline; position:absolute; right:"+defaultRightPosition+"; top:"+defaultTopPosition+";");
   localStorage.setItem("instant_Kba_default_position",(defaultRightPosition+","+defaultTopPosition));
   if(caseData != ""){
     if(window.innerHeight>500){
