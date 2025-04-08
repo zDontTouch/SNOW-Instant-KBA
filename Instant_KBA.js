@@ -276,28 +276,46 @@ async function iaRequest(path, method = "GET", body = undefined) {
 
 var initialInnerWidth = window.innerWidth;
 
-function addToCase(kbaId){
-  if(caseData != ""){
-    ise.tab.add("https://itsm.services.sap/attach_knowledge.do?targetTable=sn_customerservice_case&targetId="+caseData.id+"&source=cwf", { show: false } ).then((tab)=>{
-      tabID = tab;
-    });
-    
-    setTimeout(() => {
-      let result = ise.tab.executeJavaScript(tabID, '(() => { document.getElementById("multiField").value = '+kbaId+'; })()');
-      result = ise.tab.executeJavaScript(tabID, '(() => { document.getElementById("attachButton").click(); })()');
-      result = ise.tab.executeJavaScript(tabID, '(() => { document.getElementById("closebutton").click(); })()');
-    }, 3500);
-
-    setTimeout(() => {
-      document.getElementById("kba-success").style.display = "block";
-    }, 4900);
-
-    setTimeout(() => {
-      document.getElementById("kba-success").style.display = "none";
-    }, 8300);
-
+async function addKbaToCase(caseId,kbaId){
+  let ret = false;
+  const attachKnowledgeDetails = {
+    sysparm_processor: "SAP_Attach_Knowledge_Utils_AJAX",
+    sysparm_scope: "global",
+    sysparm_want_session_messages: "true",
+    sysparm_name: "attachKnowledgeAJAX",
+    sysparm_targetId: caseId,
+    sysparm_kbanumber: kbaId,
+    sysparm_pilotcustomer: "",
+    sysparm_synch: "true",
+    "ni.nolog.x_referer": "ignore",
+    x_referer: `attach_knowledge.do?targetTable=sn_customerservice_case&targetId=${caseId}&source=agent_workspace`,
+  };
+ 
+  const formItems = [];
+  for (var property in attachKnowledgeDetails) {
+    formItems.push(
+      encodeURIComponent(property) +
+        "=" +
+        encodeURIComponent(attachKnowledgeDetails[property])
+    );
   }
- }
+ 
+  const response = await fetch("/xmlhttp.do", {
+    method: "POST",
+    headers: {
+      Accept: "*/*",
+      "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+      "X-UserToken": window.g_ck,
+      credentials: "same-origin",
+    },
+    body: formItems.join("&"),
+  });
+ 
+  if (response.status === 200) {
+    ret = (await response.text()).includes(kbaId);
+  }
+  return ret;
+}
 
 var defaultTopPosition = "6.5%";
 var defaultRightPosition = "5%";
@@ -360,7 +378,7 @@ top.ise.case.onUpdate2(
     if(event.key === "Enter" && document.activeElement.id == "kbaText"){
       var textBoxValue = document.getElementById("kbaText").value.toString();
       var kbaID = textBoxValue.trim().split(" ")[0].split("-")[0];
-      addToCase(kbaID);
+      addKbaToCase(caseData.id,kbaID)
       document.getElementById("kbaText").value = "";
     }
   });
@@ -369,9 +387,10 @@ top.ise.case.onUpdate2(
   function loadFavoritesList(deleteMode){
     var favoriteList;
     try{
-      favoriteList = localStorage.getItem("instant_kba_favorites").split("█");
+      //favoriteList = localStorage.getItem("instant_kba_favorites").split("█");
+      favoriteList = ise.settings.getChildPaths({path:"expresskba/favourites"});
     }catch(err){
-      localStorage.setItem("instant_kba_favorites","");
+      //localStorage.setItem("instant_kba_favorites","");
       return "<span id=\"favoriteList\" style=\"font-family: var(--now-form-field--font-family, var(--now-font-family, \"Source Sans Pro\", Arial, sans-serif));\"><h3 style=\"margin:10px 0px 10px 210px;\">No favorited KBAs</h3>";
     }
     if(favoriteList == ""){
@@ -381,16 +400,16 @@ top.ise.case.onUpdate2(
     if(deleteMode){
       var favoriteHTMLList = "<span id=\"favoriteList\" style=\"font-family: var(--now-form-field--font-family, var(--now-font-family, \"Source Sans Pro\", Arial, sans-serif));\"><h3 style=\"margin:10px 0px 0px 10px;\">Click to add a Favorite KBA to this case:</h3><ul style=\"text-align:left; list-style-position:inside; list-style-type:none; padding-left:5px;\">";
       favoriteList.forEach((element,index)  => {
-        var kbaData = element.split("||");
-        favoriteHTMLList = favoriteHTMLList + "<li style=\"margin-bottom:3px;\"><span style=\"cursor:pointer; overflow: hidden;\" id=\"instantkba:"+kbaData[0]+"\"><span id=\"deletekba:"+kbaData[0]+"--"+index+"\" style=\"color:red;\">X</span> "+kbaData[1]+"</span></li>";
+        //var kbaData = element.split("||");
+        favoriteHTMLList = favoriteHTMLList + "<li style=\"margin-bottom:3px;\"><span style=\"cursor:pointer; overflow: hidden;\" id=\"instantkba:"+element[id]+"\"><span id=\"deletekba:"+element[id]+"--"+index+"\" style=\"color:red;\">X</span> "+element[desc]+"</span></li>";
       });
       favoriteHTMLList = favoriteHTMLList + "</ul></span>";
       return favoriteHTMLList;
     }else{
       var favoriteHTMLList = "<span id=\"favoriteList\" style=\"font-family: var(--now-form-field--font-family, var(--now-font-family, \"Source Sans Pro\", Arial, sans-serif));\"><h3 style=\"margin:10px 0px 0px 10px;\">Click to add a Favorite KBA to this case:</h3><ul style=\"text-align:left; list-style-position:inside; list-style-type:none; padding-left:5px;\">";
       favoriteList.forEach(element => {
-        var kbaData = element.split("||");
-        favoriteHTMLList = favoriteHTMLList + "<li style=\"margin-bottom:3px;\" style=\"margin-bottom:3px;\"><span style=\"cursor:pointer;\" id=\"instantkba:"+kbaData[0]+"\">• "+kbaData[1]+"</span></li>";
+        //var kbaData = element.split("||");
+        favoriteHTMLList = favoriteHTMLList + "<li style=\"margin-bottom:3px;\" style=\"margin-bottom:3px;\"><span style=\"cursor:pointer;\" id=\"instantkba:"+element[id]+"\">• "+element[desc]+"</span></li>";
       });
       favoriteHTMLList = favoriteHTMLList + "</ul></span>";
       return favoriteHTMLList;
@@ -400,7 +419,7 @@ top.ise.case.onUpdate2(
 
   //Add new KBA to favorites list
   function addKbaToList(kbaId,kbaNickname){
-    var favoriteList;
+    /*var favoriteList;
     try{
       favoriteList = localStorage.getItem("instant_kba_favorites").split("█");
     }catch(err){
@@ -412,8 +431,9 @@ top.ise.case.onUpdate2(
       favoriteList = [kbaId+"||"+kbaNickname.substring(0,60)];
     }else{
       favoriteList.push(kbaId+"||"+kbaNickname.substring(0,60));
-    }
-    localStorage.setItem("instant_kba_favorites",favoriteList.join("█"));
+    }*/
+    //localStorage.setItem("instant_kba_favorites",favoriteList.join("█"));
+    ise.settings.set({path:"expresskba/favourites/1",value:{id:"1234",desc:"my kba"}});
 
     //update list
     document.getElementById("favoriteList").innerHTML = loadFavoritesList(true);
