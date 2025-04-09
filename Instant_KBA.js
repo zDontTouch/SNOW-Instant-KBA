@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name     Express KBA
-// @version  2.1.2
+// @version  2.2
 // @grant    none
 // @match    *://itsm.services.sap/*
 // @include  *://itsm.services.sap/*
@@ -387,10 +387,10 @@ top.ise.case.onUpdate2(
   function loadFavoritesList(deleteMode){
     var favoriteList;
     try{
-      //favoriteList = localStorage.getItem("instant_kba_favorites").split("█");
-      favoriteList = ise.settings.getChildPaths({path:"expresskba/favourites"});
+      favoriteList = localStorage.getItem("instant_kba_favorites").split("█");
+      console.log(favoriteList);
     }catch(err){
-      //localStorage.setItem("instant_kba_favorites","");
+      localStorage.setItem("instant_kba_favorites","");
       return "<span id=\"favoriteList\" style=\"font-family: var(--now-form-field--font-family, var(--now-font-family, \"Source Sans Pro\", Arial, sans-serif));\"><h3 style=\"margin:10px 0px 10px 210px;\">No favorited KBAs</h3>";
     }
     if(favoriteList == ""){
@@ -398,18 +398,19 @@ top.ise.case.onUpdate2(
     }
 
     if(deleteMode){
+      console.log("delete mode");
       var favoriteHTMLList = "<span id=\"favoriteList\" style=\"font-family: var(--now-form-field--font-family, var(--now-font-family, \"Source Sans Pro\", Arial, sans-serif));\"><h3 style=\"margin:10px 0px 0px 10px;\">Click to add a Favorite KBA to this case:</h3><ul style=\"text-align:left; list-style-position:inside; list-style-type:none; padding-left:5px;\">";
       favoriteList.forEach((element,index)  => {
-        //var kbaData = element.split("||");
-        favoriteHTMLList = favoriteHTMLList + "<li style=\"margin-bottom:3px;\"><span style=\"cursor:pointer; overflow: hidden;\" id=\"instantkba:"+element[id]+"\"><span id=\"deletekba:"+element[id]+"--"+index+"\" style=\"color:red;\">X</span> "+element[desc]+"</span></li>";
+        var kbaData = element.split("||");
+        favoriteHTMLList = favoriteHTMLList + "<li style=\"margin-bottom:3px;\"><span style=\"cursor:pointer; overflow: hidden;\" id=\"instantkba:"+kbaData[0]+"\"><span id=\"deletekba:"+kbaData[0]+"--"+index+"\" style=\"color:red;\">X</span> "+kbaData[1]+"</span></li>";
       });
       favoriteHTMLList = favoriteHTMLList + "</ul></span>";
       return favoriteHTMLList;
     }else{
       var favoriteHTMLList = "<span id=\"favoriteList\" style=\"font-family: var(--now-form-field--font-family, var(--now-font-family, \"Source Sans Pro\", Arial, sans-serif));\"><h3 style=\"margin:10px 0px 0px 10px;\">Click to add a Favorite KBA to this case:</h3><ul style=\"text-align:left; list-style-position:inside; list-style-type:none; padding-left:5px;\">";
       favoriteList.forEach(element => {
-        //var kbaData = element.split("||");
-        favoriteHTMLList = favoriteHTMLList + "<li style=\"margin-bottom:3px;\" style=\"margin-bottom:3px;\"><span style=\"cursor:pointer;\" id=\"instantkba:"+element[id]+"\">• "+element[desc]+"</span></li>";
+        var kbaData = element.split("||");
+        favoriteHTMLList = favoriteHTMLList + "<li style=\"margin-bottom:3px;\" style=\"margin-bottom:3px;\"><span style=\"cursor:pointer;\" id=\"instantkba:"+kbaData[0]+"\">• "+kbaData[1]+"</span></li>";
       });
       favoriteHTMLList = favoriteHTMLList + "</ul></span>";
       return favoriteHTMLList;
@@ -419,7 +420,7 @@ top.ise.case.onUpdate2(
 
   //Add new KBA to favorites list
   function addKbaToList(kbaId,kbaNickname){
-    /*var favoriteList;
+    var favoriteList;
     try{
       favoriteList = localStorage.getItem("instant_kba_favorites").split("█");
     }catch(err){
@@ -431,9 +432,8 @@ top.ise.case.onUpdate2(
       favoriteList = [kbaId+"||"+kbaNickname.substring(0,60)];
     }else{
       favoriteList.push(kbaId+"||"+kbaNickname.substring(0,60));
-    }*/
-    //localStorage.setItem("instant_kba_favorites",favoriteList.join("█"));
-    ise.settings.set({path:"expresskba/favourites/1",value:{id:"1234",desc:"my kba"}});
+    }
+    localStorage.setItem("instant_kba_favorites",favoriteList.join("█"));
 
     //update list
     document.getElementById("favoriteList").innerHTML = loadFavoritesList(true);
@@ -537,7 +537,7 @@ document.addEventListener("click", (e)=>{
     }
   //Add KBA from the list
   }else if(e.target.id.startsWith("instantkba:")){
-    addToCase(e.target.id.replace("instantkba:",""));
+    addKbaToCase(caseData.id,e.target.id.replace("instantkba:",""));
     instantKbaDiv.removeChild(document.getElementById("bridgePopup"));
     isBridgePopupOpen = false;
 
