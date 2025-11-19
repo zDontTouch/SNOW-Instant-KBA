@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name     Express KBA
-// @version  2.3
+// @version  2.3.1
 // @grant    none
 // @match    https://itsm.services.sap/now/cwf/*
 // @exclude  *://itsm.services.sap/attach_knowledge*
@@ -219,6 +219,17 @@ async function sendAnalytics(action, metadata = undefined) {
   });
 }
 
+function sendAnalytics(metricName){
+  try {
+    ise.analytics.hana.send({
+      view: "ExpressKBA",
+      action: metricName,
+    });
+  } catch (error) {
+    console.error(`Failed to send analytics for ${metricName}:`, error);
+  }
+}
+
 /**
  * Make request to backend-case-assistant
  */
@@ -422,6 +433,7 @@ top.ise.case.onUpdate2(
       var textBoxValue = document.getElementById("kbaText").value.toString();
       var kbaID = textBoxValue.trim().split(" ")[0].split("-")[0];
       addKbaToCase(caseData.id,kbaID)
+      sendAnalytics("Attached_KBAs");
       document.getElementById("kbaText").value = "";
     }
   });
@@ -586,6 +598,7 @@ document.addEventListener("click", (e)=>{
   //Add KBA from the list
   }else if(e.target.id.startsWith("instantkba:")){
     addKbaToCase(caseData.id,e.target.id.replace("instantkba:",""));
+    sendAnalytics("Attached_KBAs");
     instantKbaDiv.removeChild(document.getElementById("bridgePopup"));
     isBridgePopupOpen = false;
 
