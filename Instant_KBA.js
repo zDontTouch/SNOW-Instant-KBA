@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name     Express KBA
-// @version  2.4
+// @version  2.4.1
 // @grant    none
 // @match    https://itsm.services.sap/now/cwf/*
 // @exclude  *://itsm.services.sap/attach_knowledge*
@@ -426,11 +426,10 @@ top.ise.case.onUpdate2(
         caseData = "";
       }else if (receivedCaseData.types[0] == "headers"){
         caseData = receivedCaseData;
-        suggestionKbaList = receivedCaseData.knowledgematches.data;
         if(window.innerHeight>500){
           document.body.appendChild(instantKbaDiv);
         }
-        
+        suggestionKbaList = receivedCaseData.knowledgematches.data;
         
       }      
   },
@@ -649,7 +648,7 @@ document.addEventListener("click", (e)=>{
   }else if(e.target.id == "helpButton"){
     var helpPopup = document.createElement("div");
     helpPopup.setAttribute("id","helpPopup");
-    helpPopup.innerHTML = "The Express KBA script is used to quickly attach KBAs to SNOW cases. <br>Use the textbox on the left to type the KBA ID (or the entire KBA headline, for example \"123 - ABCDEF\") and hit the enter key on your keyboard to attach it to the currently open case.<br>You can also use the Bookmarks button to create a list of your commonly used KBAs, so you can attach them to the active case with a single click.<br>The 💡 button shows KBAs suggested based on the case (including a \"score\" for the relevancy of that KBA), which also can be attached to the case by clicking the KBA title<br><br> This widget can be dragged and positioned anywhere on the screen.<br><br>Currently active case: "+caseData.headers.data.number+"<br>Script version: 2.4";
+    helpPopup.innerHTML = "The Express KBA script is used to quickly attach KBAs to SNOW cases. <br>Use the textbox on the left to type the KBA ID (or the entire KBA headline, for example \"123 - ABCDEF\") and hit the enter key on your keyboard to attach it to the currently open case.<br>You can also use the Bookmarks button to create a list of your commonly used KBAs, so you can attach them to the active case with a single click.<br>The 💡 button shows KBAs suggested based on the case (including a \"score\" for the relevancy of that KBA), which also can be attached to the case by clicking the KBA title<br><br> This widget can be dragged and positioned anywhere on the screen.<br><br>Currently active case: "+caseData.headers.data.number+"<br>Script version: 2.4.1";
     helpPopup.setAttribute("style","padding: 10px; display:block; position:absolute; left:"+(leftPosition+15)+"px; width:660px; top:25px; background-color:RGB(var(--now-color_background--primary,var(--now-color--neutral-3,209,214,214)),1);border-style:solid; border-width:1px; border-radius:8px; border-color:RGB(var(--now-button--secondary--border-color,var(--now-color--neutral-7,135,147,148)));");
 
     //Close bridge popup
