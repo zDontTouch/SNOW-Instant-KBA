@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name     Express KBA
-// @version  2.3.2
+// @version  2.4
 // @grant    none
 // @match    https://itsm.services.sap/now/cwf/*
 // @exclude  *://itsm.services.sap/attach_knowledge*
@@ -285,6 +285,7 @@ async function iaRequest(path, method = "GET", body = undefined) {
 /*****************************************************************************************************/
 
 var initialInnerWidth = window.innerWidth;
+var suggestionKbaList;
 
 function downloadFavoriteList(){
   var favoriteList = localStorage.getItem("instant_kba_favorites");
@@ -395,15 +396,21 @@ try{
   var bridgeButton = document.createElement("button");
   bridgeButton.setAttribute("id","bridgeButton");
   bridgeButton.setAttribute("style","cursor:pointer; z-index:3998; display:inline-block; vertical-align:baseline; padding:1px 5px 2px 5px; background-color:RGB(var(--now-color_background--primary,var(--now-color--neutral-3,209,214,214)),var(--now-button--secondary--background-color-alpha--hover,var(--now-button--secondary--background-color-alpha,1))); border-color:RGB(var(--now-button--secondary--border-color,var(--now-color--neutral-7,135,147,148))); border-radius:var(--now-button--secondary--border-radius,var(--now-button--border-radius,var(--now-actionable--border-radius,0))); border-width:var(--now-button--secondary--border-width,var(--now-button--border-width,var(--now-actionable--border-width,1px))); color:RGB(var(--now-button--secondary--color,var(--now-color--neutral-18,22,27,28))); font-family: var(--now-button--font-family,var(--now-actionable--font-family,var(--now-font-family,\"Source Sans Pro\",Arial,sans-serif))); font-style:var(--now-button--font-style,var(--now-actionable--font-style,normal)); font-weight:var(--now-button--font-weight,var(--now-actionable--font-weight,normal)); font-size:0.85rem; line-weight:1.25;");
-  bridgeButton.innerHTML = "★ Bookmarks";
+  bridgeButton.innerHTML = " ★ Bookmarks ";
   var helpButton = document.createElement("button");
   helpButton.setAttribute("id","helpButton");
   helpButton.setAttribute("style","cursor:pointer; z-index:3998; display:inline-block; margin-left:3px; vertical-align:baseline; padding:1px 5px 0.5px 5px; background-color:RGB(var(--now-color_background--primary,var(--now-color--neutral-3,209,214,214)),var(--now-button--secondary--background-color-alpha--hover,var(--now-button--secondary--background-color-alpha,1))); border-color:RGB(var(--now-button--secondary--border-color,var(--now-color--neutral-7,135,147,148))); border-radius:var(--now-button--secondary--border-radius,var(--now-button--border-radius,var(--now-actionable--border-radius,0))); border-width:var(--now-button--secondary--border-width,var(--now-button--border-width,var(--now-actionable--border-width,1px))); color:RGB(var(--now-button--secondary--color,var(--now-color--neutral-18,22,27,28))); font-family: var(--now-button--font-family,var(--now-actionable--font-family,var(--now-font-family,\"Source Sans Pro\",Arial,sans-serif))); font-style:var(--now-button--font-style,var(--now-actionable--font-style,normal)); font-weight:var(--now-button--font-weight,var(--now-actionable--font-weight,normal)); font-size:0.85rem; line-weight:1.25;");
   helpButton.innerHTML = "?";
+  var kbaSuggestionButton = document.createElement("button");
+  kbaSuggestionButton.setAttribute("id","suggestionButton");
+  kbaSuggestionButton.setAttribute("style","cursor:pointer; z-index:3998; display:inline-block; margin-left:3px; vertical-align:baseline; padding:1px 5px 0.5px 5px; background-color:RGB(var(--now-color_background--primary,var(--now-color--neutral-3,209,214,214)),var(--now-button--secondary--background-color-alpha--hover,var(--now-button--secondary--background-color-alpha,1))); border-color:RGB(var(--now-button--secondary--border-color,var(--now-color--neutral-7,135,147,148))); border-radius:var(--now-button--secondary--border-radius,var(--now-button--border-radius,var(--now-actionable--border-radius,0))); border-width:var(--now-button--secondary--border-width,var(--now-button--border-width,var(--now-actionable--border-width,1px))); color:RGB(var(--now-button--secondary--color,var(--now-color--neutral-18,22,27,28))); font-family: var(--now-button--font-family,var(--now-actionable--font-family,var(--now-font-family,\"Source Sans Pro\",Arial,sans-serif))); font-style:var(--now-button--font-style,var(--now-actionable--font-style,normal)); font-weight:var(--now-button--font-weight,var(--now-actionable--font-weight,normal)); font-size:0.85rem; line-weight:1.25;");
+  kbaSuggestionButton.innerHTML = "💡";
+
   instantKbaDiv.innerHTML = "<span style=\"cursor:move;\">&nbsp⁞⁞⁞&nbsp</span>";
   instantKbaDiv.appendChild(kbaTextBox);
   instantKbaDiv.innerHTML = instantKbaDiv.innerHTML+" ";
   instantKbaDiv.appendChild(bridgeButton);
+  instantKbaDiv.appendChild(kbaSuggestionButton);
   instantKbaDiv.appendChild(helpButton);
 
 
@@ -419,6 +426,7 @@ top.ise.case.onUpdate2(
         caseData = "";
       }else if (receivedCaseData.types[0] == "headers"){
         caseData = receivedCaseData;
+        suggestionKbaList = receivedCaseData.knowledgematches.data;
         if(window.innerHeight>500){
           document.body.appendChild(instantKbaDiv);
         }
@@ -437,6 +445,26 @@ top.ise.case.onUpdate2(
       document.getElementById("kbaText").value = "";
     }
   });
+
+  //format suggestions colleted from onUpdate2 
+  function loadSuggestionsList(){
+    var suggestionList = "<span id=\"favoriteList\" style=\"font-family: var(--now-form-field--font-family, var(--now-font-family, \"Source Sans Pro\", Arial, sans-serif));\"><h3 style=\"margin:10px 0px 0px 10px;\">KBAs suggested for this case:&nbsp;&nbsp;&nbsp;(click to attach the KBA to the case)</h3>";
+    suggestionList = suggestionList + "<table style=\"border-collapse:separate; borer-spacing:0 5px; text-align:left; list-style-position:inside; list-style-type:none; padding-left:5px; width:100%\"><colgroup><col style=\"width:80%;><col style=\"width:10%;><col style=\"width:10%;>\"</colgroup>"
+
+    var openKbaButton = "<button style=\"cursor:pointer; z-index:3998; display:inline-block; margin-left:3px; vertical-align:baseline; padding:1px 5px 0.5px 5px; background-color:RGB(var(--now-color_background--primary,var(--now-color--neutral-3,209,214,214)),var(--now-button--secondary--background-color-alpha--hover,var(--now-button--secondary--background-color-alpha,1))); border-color:RGB(var(--now-button--secondary--border-color,var(--now-color--neutral-7,135,147,148))); border-radius:var(--now-button--secondary--border-radius,var(--now-button--border-radius,var(--now-actionable--border-radius,0))); border-width:var(--now-button--secondary--border-width,var(--now-button--border-width,var(--now-actionable--border-width,1px))); color:RGB(var(--now-button--secondary--color,var(--now-color--neutral-18,22,27,28))); font-family: var(--now-button--font-family,var(--now-actionable--font-family,var(--now-font-family,\"Source Sans Pro\",Arial,sans-serif))); font-style:var(--now-button--font-style,var(--now-actionable--font-style,normal)); font-weight:var(--now-button--font-weight,var(--now-actionable--font-weight,normal)); font-size:0.85rem; line-weight:1.25;\">🔗</button>"
+
+    if (suggestionKbaList == ""){
+      return "<span id=\"favoriteList\" style=\"font-family: var(--now-form-field--font-family, var(--now-font-family, \"Source Sans Pro\", Arial, sans-serif));\"><h3 style=\"margin:10px 0px 10px 210px;\">No suggested KBAs found</h3>";
+    }else{
+      suggestionList = suggestionList + "<tr><td><h3>KBA</h3></td> <td><h3>Link</h3></td> <td><h3>Score</h3></td></tr>"
+      suggestionKbaList.forEach(element => {
+        var kbaDisplayTitle = (element["title"].length > 70)? element["title"].substring(0,67)+"..." : element["title"];
+        suggestionList = suggestionList + "<tr style=\"margin-bottom:3px;\"><td><span style=\"cursor:pointer; overflow: hidden;\" id=\"instantkba:"+element["id"]+"\">"+element["id"] + " - " + kbaDisplayTitle +"</span></td><td><a href=\"https://me.sap.com/notes/"+element["id"]+"\" target=\"_blank\">"+openKbaButton+"</a></td><td>"+element["score"].toFixed(2)+"</td></tr>";
+      });
+    }
+    suggestionList = suggestionList + "</table></span>"
+    return suggestionList;
+  }
 
   //Load KBA List from Local Storage
   function loadFavoritesList(deleteMode){
@@ -550,6 +578,7 @@ document.addEventListener("mouseup",()=>{
 
 var isBridgePopupOpen = false;
 var isHelpPopupOpen = false;
+var isSuggestionPopupOpen = false;
 var isListInEditMode = false;
 document.addEventListener("click", (e)=>{
 
@@ -586,7 +615,20 @@ document.addEventListener("click", (e)=>{
     importButton.setAttribute("id","importList");
     importButton.innerHTML = "↥";
     bridgePopup.appendChild(importButton);
-    //close Help popup
+
+    //Close suggestions popup
+    try{
+      instantKbaDiv.removeChild(document.getElementById("suggestionPopup"));
+      isSuggestionPopupOpen = false;
+    }catch(err){}
+
+    //Close help popup
+    try{
+      instantKbaDiv.removeChild(document.getElementById("helpPopup"));
+      isHelpPopupOpen = false;
+    }catch(err){}
+
+    //close bridge popup if already open
     if(isBridgePopupOpen){
       instantKbaDiv.removeChild(document.getElementById("bridgePopup"));
       isBridgePopupOpen = false;
@@ -595,6 +637,7 @@ document.addEventListener("click", (e)=>{
       instantKbaDiv.appendChild(bridgePopup);
       isBridgePopupOpen = true;
     }
+    
   //Add KBA from the list
   }else if(e.target.id.startsWith("instantkba:")){
     addKbaToCase(caseData.id,e.target.id.replace("instantkba:",""));
@@ -606,13 +649,19 @@ document.addEventListener("click", (e)=>{
   }else if(e.target.id == "helpButton"){
     var helpPopup = document.createElement("div");
     helpPopup.setAttribute("id","helpPopup");
-    helpPopup.innerHTML = "The Express KBA script is used to quickly attach KBAs to SNOW cases. <br>Use the textbox on the left to type the KBA ID (or the entire KBA headline, for example \"123 - ABCDEF\") and hit the enter key on your keyboard to attach it to the currently open case.<br>You can also use the Bookmarks button to create a list of your commonly used KBAs, so you can attach them to the active case with a single click.<br>This widget can be dragged and positioned anywhere on the screen.<br><br>Currently active case: "+caseData.headers.data.number;
-    helpPopup.setAttribute("style","padding: 4px; display:block; position:absolute; left:"+(leftPosition+15)+"px; width:660px; top:25px; background-color:RGB(var(--now-color_background--primary,var(--now-color--neutral-3,209,214,214)),1);border-style:solid; border-width:1px; border-radius:8px; border-color:RGB(var(--now-button--secondary--border-color,var(--now-color--neutral-7,135,147,148)));");
+    helpPopup.innerHTML = "The Express KBA script is used to quickly attach KBAs to SNOW cases. <br>Use the textbox on the left to type the KBA ID (or the entire KBA headline, for example \"123 - ABCDEF\") and hit the enter key on your keyboard to attach it to the currently open case.<br>You can also use the Bookmarks button to create a list of your commonly used KBAs, so you can attach them to the active case with a single click.<br>The 💡 button shows KBAs suggested based on the case (including a \"score\" for the relevancy of that KBA), which also can be attached to the case by clicking the KBA title<br><br> This widget can be dragged and positioned anywhere on the screen.<br><br>Currently active case: "+caseData.headers.data.number+"<br>Script version: 2.4";
+    helpPopup.setAttribute("style","padding: 10px; display:block; position:absolute; left:"+(leftPosition+15)+"px; width:660px; top:25px; background-color:RGB(var(--now-color_background--primary,var(--now-color--neutral-3,209,214,214)),1);border-style:solid; border-width:1px; border-radius:8px; border-color:RGB(var(--now-button--secondary--border-color,var(--now-color--neutral-7,135,147,148)));");
 
     //Close bridge popup
     try{
       instantKbaDiv.removeChild(document.getElementById("bridgePopup"));
       isBridgePopupOpen = false;      
+    }catch(err){}
+
+    //Close suggestion popup
+    try{
+      instantKbaDiv.removeChild(document.getElementById("suggestionPopup"));
+      isSuggestionPopupOpen = false;      
     }catch(err){}
 
     if(isHelpPopupOpen){
@@ -713,11 +762,39 @@ document.addEventListener("click", (e)=>{
     downloadFavoriteList();
   }else if (e.target.id == "importList"){
     uploadFavoriteList();
-  }else{
-    isListInEditMode = false;
+  }else if (e.target.id == "suggestionButton"){
+    //Open suggested KBA popup
+    var suggestionPopup = document.createElement("div");
+    suggestionPopup.setAttribute("id","suggestionPopup");
+    //load list from local storage
+    suggestionPopup.innerHTML = loadSuggestionsList();
+    suggestionPopup.setAttribute("style","display:block; position:absolute; left:"+leftPosition+"px; width:660px; top:25px; background-color:RGB(var(--now-color_background--primary,var(--now-color--neutral-3,209,214,214)),1);border-style:solid; border-width:1px; border-radius:8px; border-color:RGB(var(--now-button--secondary--border-color,var(--now-color--neutral-7,135,147,148)));");
+    
+    //Close bridge popup
     try{
       instantKbaDiv.removeChild(document.getElementById("bridgePopup"));
       isBridgePopupOpen = false;      
+    }catch(err){}
+
+    //Close help popup
+    try{
+      instantKbaDiv.removeChild(document.getElementById("helpPopup"));
+      isHelpPopupOpen = false;
+    }catch(err){}
+
+    if(isSuggestionPopupOpen){
+      instantKbaDiv.removeChild(document.getElementById("suggestionPopup"));
+      isSuggestionPopupOpen = false;
+    }else{
+      instantKbaDiv.appendChild(suggestionPopup);
+      isSuggestionPopupOpen = true;
+    }
+    
+  }else{
+    isListInEditMode = false;
+    try{
+      instantKbaDiv.removeChild(document.getElementById("suggestionPopup"));
+      isSuggestionPopupOpen = false;      
     }catch(err){}
 
     try{
